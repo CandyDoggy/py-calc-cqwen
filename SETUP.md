@@ -4,6 +4,8 @@ This calculator works on **Windows**, **macOS**, and **Linux**.
 
 🌐 **No Installation Needed**: Use the calculator online at **https://candydoggy.github.io/py-calc-cqwen/**
 
+## Version: 3.4.3 - Icon Overhaul & Memory Toggle
+
 ## Prerequisites
 
 - **Python 3.8 or higher** ([Download](https://www.python.org/downloads/))

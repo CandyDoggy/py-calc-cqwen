@@ -10,6 +10,8 @@ Works on all devices: Windows, macOS, Linux, iOS, Android
 
 ---
 
+## Version: 3.4.3 - Icon Overhaul & Memory Toggle
+
 ## Quick Start (Recommended)
 
 Works on **Windows**, **macOS**, and **Linux**:
