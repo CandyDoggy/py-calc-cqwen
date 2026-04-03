@@ -260,10 +260,15 @@ class CalculatorUI(ctk.CTk):
         self.base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         self.history_file = os.path.join(self.base_dir, "calculation_history.json")
         self.memory_file = os.path.join(self.base_dir, "memory.json")
+        self.settings_file = os.path.join(self.base_dir, "settings.json")
 
         # Load saved data
+        self._load_settings()
         self._load_history()
         self._load_memory()
+
+        # Memory panel state
+        self.memory_panel_visible = True
 
         # Configure window
         self.title("Calculator")
@@ -306,8 +311,9 @@ class CalculatorUI(ctk.CTk):
         # Content area
         self._create_content_area(main_frame)
 
-        # Memory panel (right side)
-        self._create_memory_panel(main_frame)
+        # Memory panel (right side) - toggle visibility
+        if self.memory_panel_visible:
+            self._create_memory_panel(main_frame)
 
     def _create_sidebar(self, parent):
         """Create Windows 11-style navigation sidebar."""
@@ -358,6 +364,21 @@ class CalculatorUI(ctk.CTk):
             btn.pack(fill="x", padx=12, pady=2)
             self.nav_buttons[mode] = btn
 
+        # Memory panel toggle button
+        mem_toggle_text = "🧠 Hide Memory" if self.memory_panel_visible else "🧠 Show Memory"
+        self.mem_toggle_btn = ctk.CTkButton(
+            sidebar,
+            text=mem_toggle_text,
+            font=ctk.CTkFont(size=13),
+            fg_color="transparent",
+            hover_color=theme["button_hover"],
+            text_color=theme["text_secondary"],
+            height=32,
+            corner_radius=6,
+            command=self._toggle_memory_panel
+        )
+        self.mem_toggle_btn.pack(fill="x", padx=12, pady=(15, 5))
+
         # Theme selector at bottom
         sep2 = ctk.CTkFrame(sidebar, height=1, fg_color=theme["border_color"])
         sep2.pack(fill="x", padx=20, pady=(20, 10))
@@ -380,6 +401,8 @@ class CalculatorUI(ctk.CTk):
             height=32
         )
         self.theme_combo.pack(padx=20, pady=(5, 10))
+        # Set the combo box to the current loaded theme
+        self.theme_combo.set(THEMES[self.current_theme]["name"])
 
         # Highlight current mode
         self._update_nav_selection()
@@ -403,6 +426,17 @@ class CalculatorUI(ctk.CTk):
             command=lambda m=mode: self._switch_mode(m)
         )
         return btn
+
+    def _toggle_memory_panel(self):
+        """Toggle memory panel visibility."""
+        self.memory_panel_visible = not self.memory_panel_visible
+        self._save_settings()
+        self._setup_ui()
+
+    def _remove_memory_panel(self, parent):
+        """Remove memory panel from layout (used when hidden)."""
+        # Configure without memory panel column
+        parent.grid_columnconfigure(2, weight=0, minsize=0)
 
     def _update_nav_selection(self):
         """Update navigation button styles."""
@@ -429,17 +463,35 @@ class CalculatorUI(ctk.CTk):
         panel.grid(row=0, column=2, sticky="ns")
         panel.grid_propagate(False)
 
-        # Title
+        # Title row with close button
+        title_row = ctk.CTkFrame(panel, fg_color="transparent")
+        title_row.pack(fill="x", padx=15, pady=(15, 0))
+
         title = ctk.CTkLabel(
-            panel, text="Memory",
+            title_row, text="Memory",
             font=ctk.CTkFont(size=18, weight="bold"),
             text_color=theme["text_color"]
         )
-        title.pack(pady=(20, 10))
+        title.pack(side="left")
+
+        # Close button (X)
+        close_btn = ctk.CTkButton(
+            title_row,
+            text="✕",
+            font=ctk.CTkFont(size=14),
+            fg_color="transparent",
+            hover_color="#ff4444",
+            text_color=theme["text_secondary"],
+            width=24,
+            height=24,
+            corner_radius=4,
+            command=self._toggle_memory_panel
+        )
+        close_btn.pack(side="right")
 
         # Separator
         sep = ctk.CTkFrame(panel, height=1, fg_color=theme["border_color"])
-        sep.pack(fill="x", padx=15, pady=5)
+        sep.pack(fill="x", padx=15, pady=8)
 
         # Memory list container
         self.memory_list_frame = ctk.CTkScrollableFrame(
@@ -891,40 +943,30 @@ class CalculatorUI(ctk.CTk):
         # Build currency list
         self._build_currency_list()
 
-        # Bind mouse wheel to currency scroll - robust approach
-        self._bind_scroll_recursive(self.currency_scroll)
+        # Bind mouse wheel to currency scroll
+        # Bind to the scrollable frame and its parent container
+        self.currency_scroll.bind("<MouseWheel>", self._on_currency_mousewheel)
+        self.currency_scroll.bind("<Button-4>", self._on_currency_mousewheel)
+        self.currency_scroll.bind("<Button-5>", self._on_currency_mousewheel)
+        # Also bind to list_container
+        list_container.bind("<MouseWheel>", self._on_currency_mousewheel)
+        list_container.bind("<Button-4>", self._on_currency_mousewheel)
+        list_container.bind("<Button-5>", self._on_currency_mousewheel)
 
         # Initial conversion
         self._on_currency_change()
 
-    def _bind_scroll_recursive(self, widget):
-        """Bind mouse wheel scrolling recursively to all widgets."""
-        # Windows
-        widget.bind("<MouseWheel>", self._on_mousewheel, add="+")
-        # Linux
-        widget.bind("<Button-4>", self._on_mousewheel, add="+")
-        widget.bind("<Button-5>", self._on_mousewheel, add="+")
-        # macOS
-        widget.bind("<Button-4>", self._on_mousewheel, add="+")
-        widget.bind("<Button-5>", self._on_mousewheel, add="+")
-
-        # Bind to all children
-        for child in widget.winfo_children():
-            self._bind_scroll_recursive(child)
-
-    def _on_mousewheel(self, event):
+    def _on_currency_mousewheel(self, event):
         """Handle mouse wheel scrolling for currency list."""
-        # Determine scroll direction
         if event.num == 4:
-            delta = -1  # Scroll up
+            delta = -3  # Scroll up
         elif event.num == 5:
-            delta = 1   # Scroll down
+            delta = 3   # Scroll down
         else:
             # Windows/macOS
-            delta = -1 if event.delta > 0 else 1
+            delta = -int(event.delta / 120) * 3
 
-        # Scroll the currency list
-        self.currency_scroll.yview_scroll(delta, "units")
+        self.currency_scroll._parent_canvas.yview_scroll(delta, "units")
 
     def _build_currency_list(self):
         """Build the scrollable currency list."""
@@ -1012,18 +1054,23 @@ class CalculatorUI(ctk.CTk):
                 widget.bind("<Leave>", on_leave)
 
     def _filter_currencies(self, *args):
-        """Filter currency list based on search."""
+        """Filter currency list based on search (case-insensitive)."""
         query = self.currency_search_var.get().lower()
 
         for widget in self.currency_scroll.winfo_children():
-            # Get the code label text
-            code_label = widget.winfo_children()[1]
-            code = code_label.cget("text").lower()
+            # Get the code label text (column 1) and symbol/name
+            children = list(widget.winfo_children())
+            if len(children) >= 2:
+                code_label = children[1]
+                code_text = code_label.cget("text").lower()
+                # Also check the symbol/icon (column 0)
+                sym_label = children[0]
+                sym_text = sym_label.cget("text").lower()
 
-            if query in code or query == "":
-                widget.grid()
-            else:
-                widget.grid_remove()
+                if query in code_text or query in sym_text or query == "":
+                    widget.grid()
+                else:
+                    widget.grid_remove()
 
     def _on_currency_select(self, code):
         """Handle currency selection from list."""
@@ -1869,6 +1916,36 @@ class CalculatorUI(ctk.CTk):
 
         self._apply_theme()
         self._setup_ui()
+        self._save_settings()
+
+    def _load_settings(self):
+        """Load user settings (theme, memory panel state)."""
+        try:
+            if os.path.exists(self.settings_file):
+                with open(self.settings_file, 'r') as f:
+                    data = json.load(f)
+                    theme_key = data.get("theme", "fluent_dark")
+                    if theme_key in THEMES:
+                        self.current_theme = theme_key
+                    # Restore memory panel state
+                    if "memory_panel_visible" in data:
+                        self.memory_panel_visible = data["memory_panel_visible"]
+                    else:
+                        self.memory_panel_visible = True
+        except Exception:
+            self.memory_panel_visible = True
+
+    def _save_settings(self):
+        """Save user settings to file."""
+        try:
+            data = {
+                "theme": self.current_theme,
+                "memory_panel_visible": getattr(self, "memory_panel_visible", True)
+            }
+            with open(self.settings_file, 'w') as f:
+                json.dump(data, f, indent=2)
+        except Exception:
+            pass
 
     def _bind_keys(self):
         """Bind keyboard events."""
@@ -1895,6 +1972,7 @@ class CalculatorUI(ctk.CTk):
         """Handle window closing."""
         self._save_history()
         self._save_memory()
+        self._save_settings()
         self.destroy()
 
 
