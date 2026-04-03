@@ -54,6 +54,97 @@ THEMES = {
         "text_secondary": "#b0b0b0",
         "border_color": "#505050",
     },
+    "midnight_blue": {
+        "name": "Midnight Blue",
+        "bg_color": "#0a1628",
+        "sidebar_bg": "#081220",
+        "card_bg": "#12203a",
+        "button_bg": "#1a2d4d",
+        "button_hover": "#243b5c",
+        "accent_color": "#4dabf7",
+        "accent_hover": "#5ebaf8",
+        "text_color": "#e8f1ff",
+        "text_secondary": "#8b9dc3",
+        "border_color": "#1e3a5f",
+    },
+    "forest_green": {
+        "name": "Forest Green",
+        "bg_color": "#1a2e1a",
+        "sidebar_bg": "#142414",
+        "card_bg": "#243824",
+        "button_bg": "#2e452e",
+        "button_hover": "#3a553a",
+        "accent_color": "#69db7c",
+        "accent_hover": "#7de08f",
+        "text_color": "#e8f5e8",
+        "text_secondary": "#8baf8b",
+        "border_color": "#3a5a3a",
+    },
+    "sunset_orange": {
+        "name": "Sunset Orange",
+        "bg_color": "#2a1a14",
+        "sidebar_bg": "#221410",
+        "card_bg": "#3a2418",
+        "button_bg": "#4d3020",
+        "button_hover": "#5d3a28",
+        "accent_color": "#ff922b",
+        "accent_hover": "#ffa03c",
+        "text_color": "#fff3e6",
+        "text_secondary": "#c4956a",
+        "border_color": "#5a3a28",
+    },
+    "royal_purple": {
+        "name": "Royal Purple",
+        "bg_color": "#1e1432",
+        "sidebar_bg": "#181028",
+        "card_bg": "#2a1e42",
+        "button_bg": "#3a2a55",
+        "button_hover": "#483568",
+        "accent_color": "#b197fc",
+        "accent_hover": "#c4a8fd",
+        "text_color": "#f0e6ff",
+        "text_secondary": "#9b8bb4",
+        "border_color": "#4a3568",
+    },
+    "rose_gold": {
+        "name": "Rose Gold",
+        "bg_color": "#2a1e24",
+        "sidebar_bg": "#22181c",
+        "card_bg": "#3a2832",
+        "button_bg": "#4d3440",
+        "button_hover": "#5d3f4c",
+        "accent_color": "#f783ac",
+        "accent_hover": "#f993b8",
+        "text_color": "#ffe6f0",
+        "text_secondary": "#c495a8",
+        "border_color": "#5a3a48",
+    },
+    "arctic_white": {
+        "name": "Arctic White",
+        "bg_color": "#f8f9fa",
+        "sidebar_bg": "#e9ecef",
+        "card_bg": "#ffffff",
+        "button_bg": "#e9ecef",
+        "button_hover": "#dee2e6",
+        "accent_color": "#228be6",
+        "accent_hover": "#339af0",
+        "text_color": "#212529",
+        "text_secondary": "#868e96",
+        "border_color": "#ced4da",
+    },
+    "cyber_yellow": {
+        "name": "Cyber Yellow",
+        "bg_color": "#1a180a",
+        "sidebar_bg": "#141208",
+        "card_bg": "#2a2610",
+        "button_bg": "#3d3818",
+        "button_hover": "#4d4620",
+        "accent_color": "#ffd43b",
+        "accent_hover": "#ffe05c",
+        "text_color": "#fff8e6",
+        "text_secondary": "#c4b86a",
+        "border_color": "#5a5228",
+    },
 }
 
 # Currency exchange rates (base: USD)
@@ -800,46 +891,40 @@ class CalculatorUI(ctk.CTk):
         # Build currency list
         self._build_currency_list()
 
-        # Bind mouse wheel to currency scroll
-        self._bind_mouse_wheel(self.currency_scroll)
+        # Bind mouse wheel to currency scroll - robust approach
+        self._bind_scroll_recursive(self.currency_scroll)
 
         # Initial conversion
         self._on_currency_change()
 
-    def _bind_mouse_wheel(self, widget):
-        """Bind mouse wheel scrolling to a widget."""
+    def _bind_scroll_recursive(self, widget):
+        """Bind mouse wheel scrolling recursively to all widgets."""
         # Windows
-        widget.bind("<MouseWheel>", self._on_mousewheel, add='+')
+        widget.bind("<MouseWheel>", self._on_mousewheel, add="+")
         # Linux
-        widget.bind("<Button-4>", self._on_mousewheel, add='+')
-        widget.bind("<Button-5>", self._on_mousewheel, add='+')
-        
-        # Also bind to child widgets
+        widget.bind("<Button-4>", self._on_mousewheel, add="+")
+        widget.bind("<Button-5>", self._on_mousewheel, add="+")
+        # macOS
+        widget.bind("<Button-4>", self._on_mousewheel, add="+")
+        widget.bind("<Button-5>", self._on_mousewheel, add="+")
+
+        # Bind to all children
         for child in widget.winfo_children():
-            self._bind_mouse_wheel(child)
+            self._bind_scroll_recursive(child)
 
     def _on_mousewheel(self, event):
-        """Handle mouse wheel scrolling."""
-        # Windows
-        if event.num == 36 or event.num == 37:  # Windows
-            delta = -1 if event.delta < 0 else 1
-        # Linux
-        elif event.num == 4:
-            delta = -1
+        """Handle mouse wheel scrolling for currency list."""
+        # Determine scroll direction
+        if event.num == 4:
+            delta = -1  # Scroll up
         elif event.num == 5:
-            delta = 1
+            delta = 1   # Scroll down
         else:
-            delta = -1 if event.delta < 0 else 1
-        
-        # Get the parent scrollable frame
-        widget = event.widget
-        while widget and not hasattr(widget, 'yview'):
-            widget = widget.master
-            if widget == event.widget.master.master:  # Prevent infinite loop
-                break
-        
-        if hasattr(widget, 'yview'):
-            widget.yview_scroll(-delta, "units")
+            # Windows/macOS
+            delta = -1 if event.delta > 0 else 1
+
+        # Scroll the currency list
+        self.currency_scroll.yview_scroll(delta, "units")
 
     def _build_currency_list(self):
         """Build the scrollable currency list."""
