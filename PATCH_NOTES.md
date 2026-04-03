@@ -1,6 +1,40 @@
 # Patch Notes
 
-## Version 3.0.1 (April 3, 2026) - Bug Fix Release 🔧
+## Version 3.1.0 (April 3, 2026) - Windows 11 Fluent Design & Currency Exchange 🪟
+
+### Major Changes
+- **Complete UI Redesign**: Windows 11 Fluent Design language throughout
+- **Navigation Sidebar**: Switch between Standard, Scientific, and Currency modes
+- **New Theme System**: Fluent Dark, Fluent Light, Fluent Mica themes
+
+### New Features
+- 💱 **Currency Exchanger**: Convert between 20 world currencies
+  - USD, EUR, GBP, JPY, CNY, AUD, CAD, CHF, INR, KRW, and more
+  - Real-time conversion with swap button
+- 🧠 **Memory System**: M+, M-, MR, MC, MS buttons
+  - Memory persists between sessions (saved to memory.json)
+  - Visual "M" indicator when memory is active
+- 📜 **Persistent History**: Calculations saved automatically to calculation_history.json
+  - History loads on startup
+  - Saved on every calculation and app close
+
+### Theme Updates
+| Theme | Description |
+|-------|-------------|
+| Fluent Dark | Windows 11 dark mode aesthetic |
+| Fluent Light | Clean, bright Windows 11 light mode |
+| Fluent Mica | Subtle, sophisticated mica material effect |
+
+### Technical Changes
+- Rewrote UI with sidebar navigation pattern
+- Added currency conversion engine with 20 currencies
+- Added memory persistence system
+- Added history save/load functionality
+- Updated button styling to Fluent Design standards
+
+---
+
+## Version 3.0.4.1 (April 3, 2026) - Calculator Logo & Icon 🎨
 
 ### Bug Fixes
 - Fixed `AttributeError: 'Calculator' object has no attribute 'calculate'`
