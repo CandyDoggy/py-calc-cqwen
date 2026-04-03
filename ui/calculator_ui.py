@@ -53,6 +53,45 @@ THEMES = {
         "text_secondary": "#b0b0b0",
         "border_color": "#505050",
     },
+    "minimalist": {
+        "name": "Minimalist",
+        "bg_color": "#0d1117",
+        "sidebar_bg": "#0a0e10",
+        "card_bg": "#161b22",
+        "button_bg": "#21262d",
+        "button_hover": "#30363d",
+        "accent_color": "#58a6ff",
+        "accent_hover": "#79b8ff",
+        "text_color": "#ffffff",
+        "text_secondary": "#8b949e",
+        "border_color": "#30363d",
+    },
+    "modern": {
+        "name": "Modern",
+        "bg_color": "#000000",
+        "sidebar_bg": "#0a0a0a",
+        "card_bg": "#111111",
+        "button_bg": "#1a1a1a",
+        "button_hover": "#2a2a2a",
+        "accent_color": "#a855f7",
+        "accent_hover": "#b975f9",
+        "text_color": "#ffffff",
+        "text_secondary": "#888888",
+        "border_color": "#333333",
+    },
+    "programmer": {
+        "name": "Programmer",
+        "bg_color": "#0f0f1a",
+        "sidebar_bg": "#0a0a14",
+        "card_bg": "#1a1a2e",
+        "button_bg": "#2d2d44",
+        "button_hover": "#3d3d5c",
+        "accent_color": "#7c3aed",
+        "accent_hover": "#8b5cf6",
+        "text_color": "#ffffff",
+        "text_secondary": "#9ca3af",
+        "border_color": "#3d3d5c",
+    },
 }
 
 # Currency exchange rates (base: USD)
@@ -77,6 +116,39 @@ CURRENCY_RATES = {
     "TRY": 30.25,
     "RUB": 92.50,
     "ZAR": 18.95,
+    "AMD": 403.50,  # Armenian Dram
+    "AED": 3.67,    # UAE Dirham
+    "THB": 35.20,   # Thai Baht
+    "IDR": 15650.0, # Indonesian Rupiah
+    "MYR": 4.72,    # Malaysian Ringgit
+    "PHP": 55.80,   # Philippine Peso
+    "PLN": 4.02,    # Polish Zloty
+    "CZK": 22.85,   # Czech Koruna
+    "HUF": 355.0,   # Hungarian Forint
+    "ILS": 3.65,    # Israeli Shekel
+    "CLP": 890.0,   # Chilean Peso
+    "COP": 3950.0,  # Colombian Peso
+    "ARS": 350.0,   # Argentine Peso
+    "EGP": 30.90,   # Egyptian Pound
+    "SAR": 3.75,    # Saudi Riyal
+    "QAR": 3.64,    # Qatari Riyal
+    "KWD": 0.31,    # Kuwaiti Dinar
+    "BHD": 0.38,    # Bahraini Dinar
+    "OMR": 0.38,    # Omani Rial
+    "JOD": 0.71,    # Jordanian Dinar
+    "LKR": 325.0,   # Sri Lankan Rupee
+    "PKR": 278.0,   # Pakistani Rupee
+    "BDT": 109.50,  # Bangladeshi Taka
+    "VND": 24350.0, # Vietnamese Dong
+    "NGN": 770.0,   # Nigerian Naira
+    "KES": 155.0,   # Kenyan Shilling
+    "GHS": 12.05,   # Ghanaian Cedi
+    "UAH": 36.80,   # Ukrainian Hryvnia
+    "RON": 4.57,    # Romanian Leu
+    "BGN": 1.80,    # Bulgarian Lev
+    "HRK": 6.93,    # Croatian Kuna
+    "DKK": 6.87,    # Danish Krone
+    "ISK": 137.50,  # Icelandic Krona
 }
 
 CURRENCY_SYMBOLS = {
@@ -84,6 +156,13 @@ CURRENCY_SYMBOLS = {
     "AUD": "A$", "CAD": "C$", "CHF": "Fr", "INR": "₹", "KRW": "₩",
     "MXN": "MX$", "BRL": "R$", "SGD": "S$", "HKD": "HK$", "NZD": "NZ$",
     "SEK": "kr", "NOK": "kr", "TRY": "₺", "RUB": "₽", "ZAR": "R",
+    "AMD": "֏", "AED": "د.إ", "THB": "฿", "IDR": "Rp", "MYR": "RM",
+    "PHP": "₱", "PLN": "zł", "CZK": "Kč", "HUF": "Ft", "ILS": "₪",
+    "CLP": "CL$", "COP": "CO$", "ARS": "AR$", "EGP": "E£", "SAR": "﷼",
+    "QAR": "﷼", "KWD": "KD", "BHD": "BD", "OMR": "﷼", "JOD": "JD",
+    "LKR": "₨", "PKR": "₨", "BDT": "৳", "VND": "₫", "NGN": "₦",
+    "KES": "KSh", "GHS": "₵", "UAH": "₴", "RON": "lei", "BGN": "лв",
+    "HRK": "kn", "DKK": "kr", "ISK": "kr",
 }
 
 
