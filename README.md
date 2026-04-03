@@ -6,7 +6,7 @@ A modern, feature-rich calculator application built with **Python** and **Custom
 ![CustomTkinter](https://img.shields.io/badge/CustomTkinter-5.2+-green.svg)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 ![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)
-![Version](https://img.shields.io/badge/v3.4.31-Web%20Parity-60cdff)
+![Version](https://img.shields.io/badge/v3.4.32-Web%20Update-60cdff)
 
 🌐 **[Try it Online →](https://candydoggy.github.io/py-calc-cqwen/)**
 
@@ -273,7 +273,11 @@ chmod +x run.sh
 
 See [PATCH_NOTES.md](PATCH_NOTES.md) for detailed version history.
 
-### Latest: v3.4.31 (2026) - Web Parity & Desktop Bug Fix
+### Latest: v3.4.32 (2026) - Web Update
+- 🔧 Fixed web sidebar layout and memory toggle positioning
+- Web version now matches desktop sidebar layout
+
+### v3.4.31 (2026) - Web Parity & Desktop Bug Fix
 - 🔧 Web memory toggle moved to sidebar (matching desktop layout)
 - Fixed desktop content disappearing when closing memory panel
 - Added web version disclaimer to README

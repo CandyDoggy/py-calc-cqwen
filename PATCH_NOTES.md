@@ -1,5 +1,14 @@
 # Patch Notes
 
+## Version 3.4.32 (April 3, 2026) - Web Update 🔧
+
+### Web Improvements
+- **Fixed sidebar layout** - Theme selector now properly pushed to bottom
+- **Memory toggle button properly positioned** at sidebar bottom (matching desktop layout)
+- Same 160x32px button with SVG icon
+
+---
+
 ## Version 3.4.31 (April 3, 2026) - Web Parity & Desktop Bug Fix 🔧
 
 ### New Features
@@ -428,4 +437,4 @@ Found a bug? Please include:
 ---
 
 **Last Updated**: April 3, 2026
-**Current Version**: 3.4.3
+**Current Version**: 3.4.32
