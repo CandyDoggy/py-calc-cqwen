@@ -667,10 +667,6 @@ class CalculatorUI(ctk.CTk):
         content.grid_columnconfigure(0, weight=1)
         content.grid_rowconfigure(0, weight=1)
 
-        # If memory panel is hidden, show "O" toggle button in content area
-        if not self.memory_panel_visible:
-            self._create_memory_toggle_button(content)
-
         if self.current_mode == "standard":
             self._create_standard_view(content)
         elif self.current_mode == "scientific":
