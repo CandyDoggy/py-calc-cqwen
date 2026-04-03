@@ -85,6 +85,28 @@ python main.py
 
 ---
 
+## Modes
+
+| Mode | Description |
+|------|-------------|
+| **Standard** | Basic arithmetic with memory buttons |
+| **Scientific** | Trig functions, logs, constants, powers |
+| **Currency** | Convert between 20 world currencies |
+
+---
+
+## Memory Buttons
+
+| Button | Action |
+|--------|--------|
+| **MC** | Memory Clear |
+| **MR** | Memory Recall (loads saved value) |
+| **M+** | Add current result to memory |
+| **M-** | Subtract current result from memory |
+| **MS** | Memory Store (save current result) |
+
+---
+
 ## Troubleshooting
 
 | Problem | Solution |

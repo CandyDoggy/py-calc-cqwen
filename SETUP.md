@@ -100,6 +100,16 @@ sudo apt install python3-full python3-venv
 
 ## Platform Notes
 
-- **Windows**: Native look with CustomTkinter dark mode
+- **Windows**: Native look with Fluent Design, Start Menu shortcut available
 - **macOS**: Full support, Retina display compatible
 - **Linux**: Works on all major distros (Ubuntu, Fedora, Arch, etc.)
+
+---
+
+## Features
+
+- **Standard Mode**: Basic arithmetic with memory (MC, MR, M+, M-, MS)
+- **Scientific Mode**: Trig, logs, constants, powers
+- **Currency Converter**: 20 world currencies with real-time conversion
+- **Persistent History**: Auto-saved between sessions
+- **Memory Persistence**: Saved values survive app restarts

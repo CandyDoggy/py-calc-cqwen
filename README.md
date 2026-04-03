@@ -7,36 +7,37 @@ A modern, feature-rich calculator application built with **Python** and **Custom
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 ![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)
 
-![Calculator](https://via.placeholder.com/800x450/0a0e14/00d4ff?text=Calculator+v3.0)
+![Calculator](https://via.placeholder.com/800x450/202020/60cdff?text=Calculator+v3.1)
 
 ---
 
 ## ✨ Features
 
-### 🎨 Multiple Beautiful Themes
+### 🎨 Windows 11 Fluent Design Themes
 | Theme | Description |
 |-------|-------------|
-| **Scientific** | Deep ocean blue with cyan accents |
-| **Minimalistic** | Clean GitHub-inspired dark theme |
-| **Programmer** | Purple cyberpunk aesthetic |
-| **Modern** | Pure black with vibrant accents |
-| **Frutiger Aero** | Glossy Windows Vista-era nostalgia |
+| **Fluent Dark** | Windows 11 dark mode aesthetic |
+| **Fluent Light** | Clean, bright Windows 11 light mode |
+| **Fluent Mica** | Subtle, sophisticated mica material effect |
 
-### 🧮 Calculation Modes
-- **Basic Operations**: Addition, subtraction, multiplication, division
-- **Scientific Functions**: sin, cos, tan, asin, acos, atan, log, ln
-- **Advanced Math**: Powers (x², xʸ), roots (√), percentages, negation
-- **Constants**: π (pi), e (Euler's number)
+### 🧮 Calculator Modes
+- **Standard Mode**: Basic arithmetic (+, -, ×, ÷), percentages, sign toggle
+- **Scientific Mode**: sin, cos, tan, log, ln, sqrt, powers, constants (π, e)
+- **Currency Converter**: 20 world currencies with real-time conversion
+
+### 🧠 Memory System
+- **MC** (Memory Clear), **MR** (Memory Recall), **M+** (Memory Add)
+- **M-** (Memory Subtract), **MS** (Memory Store)
+- Memory persists between sessions automatically
 
 ### 💾 Data Management
-- **Persistent History** - All calculations saved automatically
-- **Export History** - Save calculations as text files
-- **Settings Persistence** - Your theme preference is remembered
+- **Persistent History** - All calculations saved automatically to JSON
+- **History loads on startup** - Pick up where you left off
+- **Memory Persistence** - Saved memory survives app restarts
 
 ### 🎯 Modern UI/UX
-- **Dark Theme** - Easy on the eyes
-- **Smooth Interactions** - Responsive button feedback
-- **Card-based Layout** - Clean visual hierarchy
+- **Navigation Sidebar** - Switch between modes seamlessly
+- **Fluent Design** - Windows 11-style aesthetics
 - **Responsive Layout** - Proper grid alignment for all buttons
 - **Cross-Platform** - Works on Windows, macOS, and Linux
 
@@ -245,12 +246,12 @@ chmod +x run.sh
 
 See [PATCH_NOTES.md](PATCH_NOTES.md) for detailed version history.
 
-### Latest: v3.0.1 (2026)
-- Cross-platform support (Windows, macOS, Linux)
-- One-click launchers (`run.bat`, `run.sh`)
-- Dependency check on startup
-- Fixed calculation engine method mismatch
-- 5 beautiful themes including Frutiger Aero
+### Latest: v3.1.0 (2026)
+- Windows 11 Fluent Design UI with sidebar navigation
+- Currency Exchanger with 20 world currencies
+- Memory system (MC, MR, M+, M-, MS) with persistence
+- Persistent calculation history
+- Fluent Dark, Light, and Mica themes
 
 ---
 
