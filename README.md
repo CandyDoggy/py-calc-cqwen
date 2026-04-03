@@ -1,12 +1,13 @@
-# Scientific Calculator
+# Calculator
 
-A modern, feature-rich calculator application built with **Python** and **PyQt6 Fluent Widgets**.
+A modern, feature-rich calculator application built with **Python** and **CustomTkinter**.
 
 ![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
-![PyQt6](https://img.shields.io/badge/PyQt6-6.6+-green.svg)
+![CustomTkinter](https://img.shields.io/badge/CustomTkinter-5.2+-green.svg)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
+![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)
 
-![Scientific Calculator](https://via.placeholder.com/800x450/0a0e14/00d4ff?text=Scientific+Calculator+v3.0)
+![Calculator](https://via.placeholder.com/800x450/0a0e14/00d4ff?text=Calculator+v3.0)
 
 ---
 
@@ -26,7 +27,6 @@ A modern, feature-rich calculator application built with **Python** and **PyQt6 
 - **Scientific Functions**: sin, cos, tan, asin, acos, atan, log, ln
 - **Advanced Math**: Powers (x², xʸ), roots (√), percentages, negation
 - **Constants**: π (pi), e (Euler's number)
-- **Programmer Mode**: Hex, Oct, Bin conversion, bitwise operations (AND, OR, XOR, NOT)
 
 ### 💾 Data Management
 - **Persistent History** - All calculations saved automatically
@@ -34,11 +34,11 @@ A modern, feature-rich calculator application built with **Python** and **PyQt6 
 - **Settings Persistence** - Your theme preference is remembered
 
 ### 🎯 Modern UI/UX
-- **Fluent Design** - Windows 11-style aesthetics
-- **Smooth Animations** - Button hover/press effects
-- **Card-based Layout** - Elevated cards with shadows
+- **Dark Theme** - Easy on the eyes
+- **Smooth Interactions** - Responsive button feedback
+- **Card-based Layout** - Clean visual hierarchy
 - **Responsive Layout** - Proper grid alignment for all buttons
-- **High DPI Support** - Crisp display on all screens
+- **Cross-Platform** - Works on Windows, macOS, and Linux
 
 ---
 
@@ -48,18 +48,30 @@ A modern, feature-rich calculator application built with **Python** and **PyQt6 
 
 - **Python 3.8** or higher
 - **pip** (Python package manager)
-- **PyQt6** compatible system
 
-### Install Dependencies
+### Quick Start
+
+**Windows:** Double-click `run.bat`
+
+**macOS / Linux:**
+```bash
+chmod +x run.sh
+./run.sh
+```
+
+### Manual Install
 
 ```bash
 # Navigate to the calculator directory
 cd calculator
 
-# Activate virtual environment (recommended)
-# On Windows:
+# Create virtual environment
+python -m venv venv
+
+# Activate it
+# Windows:
 venv\Scripts\activate
-# On Linux/Mac:
+# macOS / Linux:
 source venv/bin/activate
 
 # Install dependencies
@@ -69,8 +81,7 @@ pip install -r requirements.txt
 ### Requirements
 
 ```
-PyQt6>=6.6.0
-PyQt6-Fluent-Widgets>=1.5.0
+customtkinter>=5.2.0
 sympy>=1.12
 numpy>=1.24.0
 scipy>=1.11.0
@@ -83,10 +94,6 @@ scipy>=1.11.0
 ### Launch the Calculator
 
 ```bash
-# Using virtual environment
-venv/bin/python main.py
-
-# Or after activating the venv
 python main.py
 ```
 
@@ -152,13 +159,15 @@ calculator/
 ├── main.py                 # Application entry point
 ├── requirements.txt        # Python dependencies
 ├── README.md              # This file
-├── PLAN.md                # Development plan
+├── SETUP.md               # Cross-platform setup guide
 ├── PATCH_NOTES.md         # Version history
+├── run.bat                # Windows launcher
+├── run.sh                 # macOS/Linux launcher
 ├── calculation_history.json  # Saved calculations
 ├── settings.json          # User settings
 ├── ui/
 │   ├── __init__.py
-│   └── calculator_ui.py   # PyQt6 UI components
+│   └── calculator_ui.py   # CustomTkinter UI components
 ├── math_engine/
 │   ├── __init__.py
 │   └── calculator.py      # Math logic (SymPy)
@@ -205,9 +214,9 @@ calculator/
 
 ### Common Issues
 
-**"No module named 'PyQt6'"**
+**"No module named 'customtkinter'"**
 ```bash
-pip install PyQt6 PyQt6-Fluent-Widgets
+pip install -r requirements.txt
 ```
 
 **"No module named 'sympy'"**
@@ -215,16 +224,14 @@ pip install PyQt6 PyQt6-Fluent-Widgets
 pip install -r requirements.txt
 ```
 
-**Display issues on Linux**
-```bash
-# For Wayland users, try running with X11:
-GDK_BACKEND=x11 venv/bin/python main.py
-```
+**Python not found (Windows)**
+- Install Python from [python.org](https://www.python.org/downloads/)
+- During install, check **"Add Python to PATH"**
 
-**High DPI display issues**
+**Permission denied (macOS/Linux)**
 ```bash
-# The app has built-in high DPI support
-# If issues persist, check your system display settings
+chmod +x run.sh
+./run.sh
 ```
 
 ---
@@ -233,12 +240,12 @@ GDK_BACKEND=x11 venv/bin/python main.py
 
 See [PATCH_NOTES.md](PATCH_NOTES.md) for detailed version history.
 
-### Latest: v3.0.0 (2026)
-- Complete UI rewrite with PyQt6
-- Fluent Design language
+### Latest: v3.0.1 (2026)
+- Cross-platform support (Windows, macOS, Linux)
+- One-click launchers (`run.bat`, `run.sh`)
+- Dependency check on startup
+- Fixed calculation engine method mismatch
 - 5 beautiful themes including Frutiger Aero
-- Smooth animations and transitions
-- Enhanced button layouts
 
 ---
 
@@ -288,8 +295,7 @@ copies of the Software.
 
 ## 🙏 Acknowledgments
 
-- **PyQt6** - Powerful Python GUI framework
-- **PyQt6-Fluent-Widgets** - Beautiful Fluent Design components
+- **CustomTkinter** - Modern cross-platform UI framework
 - **SymPy** - Symbolic mathematics engine
 - **NumPy** - Numerical computing
 - **SciPy** - Scientific computing library
@@ -302,4 +308,4 @@ For questions or support, please open an issue on the project repository.
 
 ---
 
-**Built with ❤️ using Python and PyQt6**
+**Built with ❤️ using Python and CustomTkinter**
