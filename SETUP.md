@@ -10,6 +10,12 @@ This calculator works on **Windows**, **macOS**, and **Linux**.
 
 ## Quick Start
 
+### Any OS (Recommended)
+```bash
+python launcher.py
+```
+This works on Windows, macOS, and Linux — no blocked files, no admin needed.
+
 ### Windows
 1. Double-click `run.bat` — done!
 2. Or manually:

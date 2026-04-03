@@ -51,9 +51,14 @@ A modern, feature-rich calculator application built with **Python** and **Custom
 
 ### Quick Start
 
-**Windows:** Double-click `run.bat`
+**Any OS (Recommended):**
+```bash
+python launcher.py
+```
 
-**macOS / Linux:**
+**Windows (alternative):** Double-click `run.bat`
+
+**macOS / Linux (alternative):**
 ```bash
 chmod +x run.sh
 ./run.sh
