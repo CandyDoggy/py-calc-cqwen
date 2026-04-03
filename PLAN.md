@@ -2,7 +2,7 @@
 
 ## Current Status: ✅ Complete
 
-The calculator is fully implemented with a modern PyQt6-based UI.
+The calculator is fully implemented with a modern PyQt6-based UI, custom icons, and 9 unit conversion types.
 
 ---
 
@@ -47,6 +47,10 @@ The calculator is fully implemented with a modern PyQt6-based UI.
 - [x] Hexadecimal, Octal, Binary support
 - [x] Constants (π, e)
 - [x] Keyboard support
+- [x] Currency converter with 53 currencies and custom flag icons
+- [x] Metric/Imperial converter (9 types: Length, Weight, Volume, Speed, Area, Time, Data, Energy, Pressure)
+- [x] Temperature converter (Celsius, Fahrenheit, Kelvin)
+- [x] Custom PNG icons for all sidebar tabs
 
 ---
 
@@ -128,8 +132,6 @@ python main.py
 
 ### Potential Features
 - [ ] Graphing capabilities
-- [ ] Unit conversion
-- [ ] Currency conversion
 - [ ] Custom themes creator
 - [ ] Cloud sync for history
 - [ ] Plugin system for custom functions

@@ -7,7 +7,7 @@ A modern, feature-rich calculator application built with **Python** and **Custom
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 ![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)
 
-![Calculator](https://via.placeholder.com/800x450/202020/60cdff?text=Calculator+v3.1)
+![Calculator](https://via.placeholder.com/800x450/202020/60cdff?text=Calculator+v3.3)
 
 ---
 
@@ -23,7 +23,17 @@ A modern, feature-rich calculator application built with **Python** and **Custom
 ### 🧮 Calculator Modes
 - **Standard Mode**: Basic arithmetic (+, -, ×, ÷), percentages, sign toggle
 - **Scientific Mode**: sin, cos, tan, log, ln, sqrt, powers, constants (π, e)
-- **Currency Converter**: 20 world currencies with real-time conversion
+- **Programmer Mode**: Hex/Dec/Oct/Bin conversion, bitwise operations
+- **Minimalist Mode**: Clean, essentials-only interface
+- **Modern Mode**: Extra functions with contemporary design
+- **Currency Converter**: 53 world currencies with custom flag icons
+- **Metric/Imperial Converter**: 9 conversion types (Length, Weight, Volume, Speed, Area, Time, Data, Energy, Pressure)
+- **Temperature Converter**: Celsius, Fahrenheit, Kelvin
+
+### 🖼️ Custom Icons
+- Clean, modern PNG icons for all sidebar tabs
+- Currency-specific colored icons with national flag colors and symbols
+- Icons generated via PIL/Pillow (rerunnable with `generate_icons.py`)
 
 ### 🧠 Memory System
 - **MC** (Memory Clear), **MR** (Memory Recall), **M+** (Memory Add)
@@ -40,6 +50,7 @@ A modern, feature-rich calculator application built with **Python** and **Custom
 - **Fluent Design** - Windows 11-style aesthetics
 - **Responsive Layout** - Proper grid alignment for all buttons
 - **Cross-Platform** - Works on Windows, macOS, and Linux
+- **Mouse Wheel Scrolling** - Works in currency converter list
 
 ---
 

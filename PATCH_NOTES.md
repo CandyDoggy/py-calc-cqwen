@@ -1,5 +1,42 @@
 # Patch Notes
 
+## Version 3.3.0 (April 3, 2026) - Visual Overhaul & Expanded Converters 🎨
+
+### Visual Enhancements
+- **Sidebar Icons**: Replaced emoji icons with custom PNG icons (8 tabs)
+  - Standard, Scientific, Programmer, Minimalist, Modern, Currency, Metric, Temperature
+  - Clean, Fluent Design-style icons generated via PIL/Pillow
+- **Currency List Icons**: 53 colored currency flag icons with country-specific colors and symbols
+  - Each icon uses national flag colors + currency symbol ($, €, £, ¥, ₹, etc.)
+  - Improves visual recognition in the currency converter
+
+### New Metric/Imperial Conversion Types (5 added, 9 total)
+- **Area**: Sq Meters, Sq Kilometers, Hectares → Sq Feet, Sq Yards, Acres, Sq Miles
+- **Time**: Seconds, Minutes, Hours, Days, Weeks, Milliseconds, Microseconds
+- **Data**: Bytes, Kilobytes, Megabytes, Gigabytes, Terabytes, Bits, Kilobits, Megabits, Gigabits
+- **Energy**: Joules, Kilojoules, Calories, Kilocalories, Watt-hours, Kilowatt-hours
+- **Pressure**: Pascal, Kilopascal, Bar, Millibar, Atmosphere, Torr → PSI, KSI
+
+### Existing Type Expansions
+- **Length**: Added Micrometers, Nanometers, Nautical Miles
+- **Weight**: Added Milligrams, Metric Tons, Stones, Short/Long Tons
+- **Volume**: Added Cubic Meters, Cubic Centimeters, Quarts, Pints, Cups, Cubic Feet, Cubic Inches
+- **Speed**: Added Meters/s, Feet/s, Knots
+
+### Bug Fixes
+- 🖱️ **Fixed currency list mouse wheel scrolling** (Windows + Linux support)
+  - `<MouseWheel>` for Windows, `<Button-4>`/`<Button-5>` for Linux
+  - Recursive binding to all child widgets for reliable scrolling
+
+### Technical Changes
+- Added `generate_icons.py` script for regenerating all icons
+- Added Pillow (PIL) dependency for image handling
+- Icon loading via `ctk.CTkImage` for proper light/dark mode support
+- Currency icon caching for better performance
+- Expanded conversion factors with scientific notation for extreme values
+
+---
+
 ## Version 3.2.1 (April 3, 2026) - New Calculator Modes & 50+ Currencies 🧮
 
 ### New Calculator Modes
@@ -261,5 +298,5 @@ Found a bug? Please include:
 
 ---
 
-**Last Updated**: April 2026
-**Current Version**: 3.0.0
+**Last Updated**: April 3, 2026
+**Current Version**: 3.3.0
