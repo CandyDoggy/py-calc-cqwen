@@ -6,6 +6,7 @@ Features: Navigation sidebar, Currency Exchanger, Memory system, Persistent hist
 import customtkinter as ctk
 import tkinter as tk
 from tkinter import messagebox
+from PIL import Image, ImageTk
 import json
 import os
 from datetime import datetime
@@ -239,19 +240,30 @@ class CalculatorUI(ctk.CTk):
 
         # Navigation buttons
         self.nav_buttons = {}
+        self.nav_icons = {}  # Store icon images
         nav_items = [
-            ("standard", "🔢", "Standard"),
-            ("scientific", "🔬", "Scientific"),
-            ("programmer", "💻", "Programmer"),
-            ("minimalist", "✨", "Minimalist"),
-            ("modern", "🎨", "Modern"),
-            ("currency", "💱", "Currency"),
-            ("metric", "📏", "Metric/Imperial"),
-            ("temperature", "🌡️", "Temperature"),
+            ("standard", "icon_standard.png", "Standard"),
+            ("scientific", "icon_scientific.png", "Scientific"),
+            ("programmer", "icon_programmer.png", "Programmer"),
+            ("minimalist", "icon_minimalist.png", "Minimalist"),
+            ("modern", "icon_modern.png", "Modern"),
+            ("currency", "icon_currency.png", "Currency"),
+            ("metric", "icon_metric.png", "Metric/Imperial"),
+            ("temperature", "icon_temperature.png", "Temperature"),
         ]
 
-        for mode, icon, label in nav_items:
-            btn = self._create_nav_button(sidebar, icon, label, mode)
+        # Load icons
+        assets_dir = os.path.join(self.base_dir, "assets")
+        for mode, icon_file, label in nav_items:
+            try:
+                icon_path = os.path.join(assets_dir, icon_file)
+                pil_img = Image.open(icon_path).resize((20, 20), Image.Resampling.LANCZOS)
+                self.nav_icons[mode] = ctk.CTkImage(light_image=pil_img, dark_image=pil_img, size=(20, 20))
+            except Exception:
+                self.nav_icons[mode] = None
+
+        for mode, icon_file, label in nav_items:
+            btn = self._create_nav_button(sidebar, self.nav_icons.get(mode), label, mode)
             btn.pack(fill="x", padx=12, pady=2)
             self.nav_buttons[mode] = btn
 
@@ -288,7 +300,8 @@ class CalculatorUI(ctk.CTk):
 
         btn = ctk.CTkButton(
             parent,
-            text=f"{icon}  {label}",
+            text=label,
+            image=icon,
             font=ctk.CTkFont(size=14),
             fg_color=theme["accent_color"] if is_selected else "transparent",
             hover_color=theme["button_hover"],
@@ -780,16 +793,58 @@ class CalculatorUI(ctk.CTk):
         self.currency_select_mode = "from"
         self.currency_from_var = ctk.StringVar(value="USD")
         self.currency_to_var = ctk.StringVar(value="EUR")
+        
+        # Currency icons cache
+        self.currency_icons = {}
 
         # Build currency list
         self._build_currency_list()
 
+        # Bind mouse wheel to currency scroll
+        self._bind_mouse_wheel(self.currency_scroll)
+
         # Initial conversion
         self._on_currency_change()
+
+    def _bind_mouse_wheel(self, widget):
+        """Bind mouse wheel scrolling to a widget."""
+        # Windows
+        widget.bind("<MouseWheel>", self._on_mousewheel, add='+')
+        # Linux
+        widget.bind("<Button-4>", self._on_mousewheel, add='+')
+        widget.bind("<Button-5>", self._on_mousewheel, add='+')
+        
+        # Also bind to child widgets
+        for child in widget.winfo_children():
+            self._bind_mouse_wheel(child)
+
+    def _on_mousewheel(self, event):
+        """Handle mouse wheel scrolling."""
+        # Windows
+        if event.num == 36 or event.num == 37:  # Windows
+            delta = -1 if event.delta < 0 else 1
+        # Linux
+        elif event.num == 4:
+            delta = -1
+        elif event.num == 5:
+            delta = 1
+        else:
+            delta = -1 if event.delta < 0 else 1
+        
+        # Get the parent scrollable frame
+        widget = event.widget
+        while widget and not hasattr(widget, 'yview'):
+            widget = widget.master
+            if widget == event.widget.master.master:  # Prevent infinite loop
+                break
+        
+        if hasattr(widget, 'yview'):
+            widget.yview_scroll(-delta, "units")
 
     def _build_currency_list(self):
         """Build the scrollable currency list."""
         theme = THEMES[self.current_theme]
+        assets_dir = os.path.join(self.base_dir, "assets")
 
         # Clear existing
         for widget in self.currency_scroll.winfo_children():
@@ -803,19 +858,38 @@ class CalculatorUI(ctk.CTk):
             name = CURRENCY_NAMES.get(code, code)
             rate = CURRENCY_RATES[code]
 
+            # Load currency icon
+            icon = None
+            if code not in self.currency_icons:
+                try:
+                    icon_path = os.path.join(assets_dir, f"currency_{code}.png")
+                    if os.path.exists(icon_path):
+                        pil_img = Image.open(icon_path).resize((20, 20), Image.Resampling.LANCZOS)
+                        self.currency_icons[code] = ctk.CTkImage(light_image=pil_img, dark_image=pil_img, size=(20, 20))
+                except Exception:
+                    pass
+            icon = self.currency_icons.get(code)
+
             row_frame = ctk.CTkFrame(self.currency_scroll, fg_color="transparent")
             row_frame.grid(row=i, column=0, sticky="ew", padx=5, pady=1)
-            row_frame.grid_columnconfigure(1, weight=1)
+            row_frame.grid_columnconfigure(2, weight=1)
 
-            # Symbol
-            sym_label = ctk.CTkLabel(
-                row_frame, text=symbol,
-                font=ctk.CTkFont(size=16),
-                text_color=theme["accent_color"],
-                width=40,
-                anchor="w"
-            )
-            sym_label.grid(row=0, column=0, padx=(10, 5))
+            # Icon
+            if icon:
+                icon_label = ctk.CTkLabel(
+                    row_frame, image=icon, text="",
+                    width=20, height=20
+                )
+                icon_label.grid(row=0, column=0, padx=(5, 5))
+            else:
+                sym_label = ctk.CTkLabel(
+                    row_frame, text=symbol,
+                    font=ctk.CTkFont(size=14, weight="bold"),
+                    text_color=theme["accent_color"],
+                    width=30,
+                    anchor="w"
+                )
+                sym_label.grid(row=0, column=0, padx=(5, 5))
 
             # Code and name
             code_label = ctk.CTkLabel(
@@ -833,7 +907,7 @@ class CalculatorUI(ctk.CTk):
                 text_color=theme["text_secondary"],
                 anchor="e"
             )
-            rate_label.grid(row=0, column=2, padx=(5, 10))
+            rate_label.grid(row=0, column=2, sticky="e", padx=(5, 10))
 
             # Make row clickable
             for widget in row_frame.winfo_children():
@@ -1066,7 +1140,7 @@ class CalculatorUI(ctk.CTk):
 
         self.metric_type_combo = ctk.CTkComboBox(
             type_frame,
-            values=["Length", "Weight", "Volume", "Speed"],
+            values=["Length", "Weight", "Volume", "Speed", "Area", "Time", "Data", "Energy", "Pressure"],
             variable=self.metric_type_var,
             command=self._on_metric_type_change,
             height=36,
@@ -1159,20 +1233,35 @@ class CalculatorUI(ctk.CTk):
             "Weight": ("Kilograms", "Pounds"),
             "Volume": ("Liters", "Gallons"),
             "Speed": ("Km/h", "Mph"),
+            "Area": ("Sq Meters", "Sq Feet"),
+            "Time": ("Seconds", "Seconds"),
+            "Data": ("Bytes", "Bytes"),
+            "Energy": ("Joules", "Calories"),
+            "Pressure": ("Pascal", "PSI"),
         }
         t = self.metric_type_var.get()
         metric_u, imperial_u = type_map.get(t, ("Meters", "Feet"))
 
-        length_units = ["Meters", "Kilometers", "Centimeters", "Millimeters"]
-        weight_units = ["Grams", "Kilograms"]
-        volume_units = ["Milliliters", "Liters"]
-        speed_units = ["Km/h", "Mph"]
+        length_units = ["Meters", "Kilometers", "Centimeters", "Millimeters", "Micrometers", "Nanometers"]
+        weight_units = ["Grams", "Kilograms", "Milligrams", "Metric Tons"]
+        volume_units = ["Milliliters", "Liters", "Cubic Meters", "Cubic Centimeters"]
+        speed_units = ["Km/h", "Mph", "Meters/s", "Feet/s", "Knots"]
+        area_units = ["Sq Meters", "Sq Kilometers", "Sq Centimeters", "Hectares", "Sq Millimeters"]
+        time_units = ["Seconds", "Minutes", "Hours", "Milliseconds", "Microseconds", "Days", "Weeks"]
+        data_units = ["Bytes", "Kilobytes", "Megabytes", "Gigabytes", "Terabytes", "Bits", "Kilobits", "Megabits", "Gigabits"]
+        energy_units = ["Joules", "Kilojoules", "Calories", "Kilocalories", "Watt-hours", "Kilowatt-hours"]
+        pressure_units = ["Pascal", "Kilopascal", "Bar", "Millibar", "Atmosphere", "Torr"]
 
         unit_map = {
-            "Length": (length_units, ["Feet", "Miles", "Inches", "Yards"]),
-            "Weight": (weight_units, ["Ounces", "Pounds"]),
-            "Volume": (volume_units, ["Fluid Ounces", "Gallons"]),
-            "Speed": (speed_units, speed_units[1:]),
+            "Length": (length_units, ["Feet", "Miles", "Inches", "Yards", "Nautical Miles"]),
+            "Weight": (weight_units, ["Ounces", "Pounds", "Stones", "Short Tons", "Long Tons"]),
+            "Volume": (volume_units, ["Fluid Ounces", "Gallons", "Quarts", "Pints", "Cups", "Cubic Feet", "Cubic Inches"]),
+            "Speed": (speed_units, speed_units[2:]),
+            "Area": (area_units, ["Sq Feet", "Sq Yards", "Sq Miles", "Acres"]),
+            "Time": (time_units, time_units),
+            "Data": (data_units, data_units),
+            "Energy": (energy_units, energy_units),
+            "Pressure": (pressure_units, ["PSI", "KSI"]),
         }
 
         metric_opts, imperial_opts = unit_map.get(t, (["Meters"], ["Feet"]))
@@ -1196,20 +1285,40 @@ class CalculatorUI(ctk.CTk):
 
         # Conversion factors to base unit, then to target
         # Length (base: meters)
-        length_to_m = {"Meters": 1, "Kilometers": 1000, "Centimeters": 0.01, "Millimeters": 0.001}
-        m_to_imperial = {"Feet": 3.28084, "Miles": 0.000621371, "Inches": 39.3701, "Yards": 1.09361}
+        length_to_m = {"Meters": 1, "Kilometers": 1000, "Centimeters": 0.01, "Millimeters": 0.001, "Micrometers": 0.000001, "Nanometers": 0.000000001}
+        m_to_imperial = {"Feet": 3.28084, "Miles": 0.000621371, "Inches": 39.3701, "Yards": 1.09361, "Nautical Miles": 0.000539957}
 
         # Weight (base: kg)
-        weight_to_kg = {"Kilograms": 1, "Grams": 0.001}
-        kg_to_imperial = {"Pounds": 2.20462, "Ounces": 35.274}
+        weight_to_kg = {"Kilograms": 1, "Grams": 0.001, "Milligrams": 0.000001, "Metric Tons": 1000}
+        kg_to_imperial = {"Pounds": 2.20462, "Ounces": 35.274, "Stones": 0.157473, "Short Tons": 0.00110231, "Long Tons": 0.000984207}
 
         # Volume (base: liters)
-        volume_to_l = {"Liters": 1, "Milliliters": 0.001}
-        l_to_imperial = {"Gallons": 0.264172, "Fluid Ounces": 33.814}
+        volume_to_l = {"Liters": 1, "Milliliters": 0.001, "Cubic Meters": 1000, "Cubic Centimeters": 0.001}
+        l_to_imperial = {"Gallons": 0.264172, "Fluid Ounces": 33.814, "Quarts": 1.05669, "Pints": 2.11338, "Cups": 4.22675, "Cubic Feet": 0.0353147, "Cubic Inches": 61.0237}
 
         # Speed (base: km/h)
-        speed_to_kmh = {"Km/h": 1, "Mph": 1.60934}
-        kmh_to_imperial = {"Mph": 0.621371}
+        speed_to_kmh = {"Km/h": 1, "Mph": 1.60934, "Meters/s": 3.6, "Feet/s": 1.09728, "Knots": 1.852}
+        kmh_to_imperial = {"Mph": 0.621371, "Meters/s": 0.277778, "Feet/s": 0.911344, "Knots": 0.539957}
+
+        # Area (base: sq meters)
+        area_to_sqm = {"Sq Meters": 1, "Sq Kilometers": 1000000, "Sq Centimeters": 0.0001, "Hectares": 10000, "Sq Millimeters": 0.000001}
+        sqm_to_imperial = {"Sq Feet": 10.7639, "Sq Yards": 1.19599, "Sq Miles": 0.000000386102, "Acres": 0.000247105}
+
+        # Time (base: seconds)
+        time_to_sec = {"Seconds": 1, "Minutes": 60, "Hours": 3600, "Milliseconds": 0.001, "Microseconds": 0.000001, "Days": 86400, "Weeks": 604800}
+        sec_to_imperial = {"Seconds": 1, "Minutes": 0.0166667, "Hours": 0.000277778, "Milliseconds": 1000, "Microseconds": 1000000, "Days": 0.0000115741, "Weeks": 0.00000165344}
+
+        # Data (base: bytes)
+        data_to_bytes = {"Bytes": 1, "Kilobytes": 1000, "Megabytes": 1000000, "Gigabytes": 1000000000, "Terabytes": 1000000000000, "Bits": 0.125, "Kilobits": 125, "Megabits": 125000, "Gigabits": 125000000}
+        bytes_to_imperial = {"Bytes": 1, "Kilobytes": 0.001, "Megabytes": 0.000001, "Gigabytes": 0.000000001, "Terabytes": 0.000000000001, "Bits": 8, "Kilobits": 0.008, "Megabits": 0.000008, "Gigabits": 0.000000008}
+
+        # Energy (base: joules)
+        energy_to_j = {"Joules": 1, "Kilojoules": 1000, "Calories": 4.184, "Kilocalories": 4184, "Watt-hours": 3600, "Kilowatt-hours": 3600000}
+        j_to_imperial = {"Joules": 1, "Kilojoules": 0.001, "Calories": 0.239006, "Kilocalories": 0.000239006, "Watt-hours": 0.000277778, "Kilowatt-hours": 0.000000277778}
+
+        # Pressure (base: pascal)
+        pressure_to_pa = {"Pascal": 1, "Kilopascal": 1000, "Bar": 100000, "Millibar": 100, "Atmosphere": 101325, "Torr": 133.322}
+        pa_to_imperial = {"PSI": 0.000145038, "KSI": 0.000000145038}
 
         result = None
         if t == "Length":
@@ -1224,12 +1333,29 @@ class CalculatorUI(ctk.CTk):
         elif t == "Speed":
             kmh = value * speed_to_kmh.get(metric_u, 1)
             result = kmh * kmh_to_imperial.get(imperial_u, 1)
+        elif t == "Area":
+            sqm = value * area_to_sqm.get(metric_u, 1)
+            result = sqm * sqm_to_imperial.get(imperial_u, 1)
+        elif t == "Time":
+            sec = value * time_to_sec.get(metric_u, 1)
+            result = sec * sec_to_imperial.get(imperial_u, 1)
+        elif t == "Data":
+            bytes_val = value * data_to_bytes.get(metric_u, 1)
+            result = bytes_val * bytes_to_imperial.get(imperial_u, 1)
+        elif t == "Energy":
+            joules = value * energy_to_j.get(metric_u, 1)
+            result = joules * j_to_imperial.get(imperial_u, 1)
+        elif t == "Pressure":
+            pa = value * pressure_to_pa.get(metric_u, 1)
+            result = pa * pa_to_imperial.get(imperial_u, 1)
 
         if result is not None:
             if result == int(result):
                 result_str = str(int(result))
+            elif abs(result) < 0.0001 or abs(result) > 1000000:
+                result_str = f"{result:.6e}"
             else:
-                result_str = f"{result:.4f}".rstrip('0').rstrip('.')
+                result_str = f"{result:.6f}".rstrip('0').rstrip('.')
             self.metric_result_label.configure(
                 text=f"{value:g} {metric_u}\n=\n{result_str} {imperial_u}"
             )
